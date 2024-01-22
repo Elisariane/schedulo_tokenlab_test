@@ -25,6 +25,23 @@ const eventsController = {
     }
   },
 
+  createEvent: async (req, res) => {
+    const { title, description, startTime, endTime, userId } = req.body;
+    try {
+      const event = await Event.create({
+        title,
+        description,
+        startTime,
+        endTime,
+        userId,
+      });
+      res.status(201).json(event);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
 };
 
 module.exports = eventsController;
