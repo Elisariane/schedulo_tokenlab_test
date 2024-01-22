@@ -1,7 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const bcrypt = require('bcrypt');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,14 +11,32 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Event, { foreignKey: 'userId' });
     }
+
+    async comparePassword(password) {
+      return bcrypt.compare(password, this.password);
+    }
   }
-  User.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      name: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      password: DataTypes.STRING,
+    },
+    {
+      hooks: {
+        beforeCreate: async (user) => {
+          const hashedPassword = await bcrypt.hash(user.password, 10);
+          user.password = hashedPassword;
+        },
+      },
+    
+      sequelize,
+      modelName: 'User',
+    }
+  );
+
   return User;
 };
