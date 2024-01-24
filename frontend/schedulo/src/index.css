@@ -1,0 +1,16 @@
+.cards {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.container-hour {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.text-hour {
+    color: gray;
+}

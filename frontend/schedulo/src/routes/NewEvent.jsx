@@ -13,11 +13,13 @@ const NewEvent = () => {
 
   const createEvent = async (e) => {
     e.preventDefault();
+
+    setStartTime(new Date(startTime).toISOString()); 
+    setEndTime(new Date(endTime).toISOString()); 
+
     const event = {title, description, startTime, endTime, userId: 'e4ecb18c-bf19-4690-bca9-740bbd961893'};
-    
-    await apiEventFecth.post("/events", {
-        body: event,
-    });
+    console.log(event)
+    await apiEventFecth.post("/events", event);
 
     navigate('/');
 
