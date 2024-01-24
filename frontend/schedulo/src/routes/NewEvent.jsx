@@ -18,7 +18,6 @@ const NewEvent = () => {
     setEndTime(new Date(endTime).toISOString()); 
 
     const event = {title, description, startTime, endTime, userId: 'e4ecb18c-bf19-4690-bca9-740bbd961893'};
-    console.log(event)
     await apiEventFecth.post("/events", event);
 
     navigate('/');
