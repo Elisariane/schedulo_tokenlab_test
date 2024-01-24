@@ -26,7 +26,11 @@ const authController = {
             password: req.body.password,
           }
         });
-
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header(
+          'Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept'
+        );
         res.status(201).json({ user });
       } catch (error) {
         res.status(500).json({ error: `In create user ${error} response` });
@@ -58,7 +62,11 @@ const authController = {
       SECRET,{
         expiresIn: '1h',
       });
-
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+      );
       res.status(200).json({ token });
       next();
     } catch (error) {
