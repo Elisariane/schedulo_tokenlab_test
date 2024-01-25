@@ -14,3 +14,9 @@
 .text-hour {
     color: gray;
 }
+
+.password-wrong {
+    color: red;
+    font-weight: 400;
+    font-size: .75rem;
+}

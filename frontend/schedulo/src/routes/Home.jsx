@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Container, Row, Spinner } from "react-bootstrap";
 import apiEventFecth from "../axios/config";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [events, setEvents] = useState([]); 
@@ -26,6 +27,19 @@ const Home = () => {
     }
   }
 
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
+  const event = {title, description, startTime, endTime, userId: 'e4ecb18c-bf19-4690-bca9-740bbd961893'};
+
+  const updateEvent = async (id) => {
+    try {
+      await apiEventFecth.put(`/events/${id}`, event); 
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     getEvents();
@@ -67,9 +81,11 @@ const Home = () => {
                     
                   <Card.Text>{event.description}</Card.Text>
                   
-                  <Button className="btn-sm m-2" variant="primary">
+                  <Link to={`/update-event/${event.id}`}>
+                  <Button className="btn-sm m-2" variant="primary" >
                     Editar
                   </Button>
+                  </Link>
                   <Button className="btn-sm m-2" variant="danger" onClick={() => deleteEvent(event.id)}>
                     Excluir
                   </Button>
