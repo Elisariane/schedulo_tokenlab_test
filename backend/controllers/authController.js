@@ -56,6 +56,7 @@ const authController = {
         return res.status(401).json({ error: 'Invalid email or password' });
       }
 
+      const id = user.id;
       const token = jwt.sign({
         user: _.pick(user[0], ['id', 'email']),
       }, 
@@ -67,7 +68,7 @@ const authController = {
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept'
       );
-      res.status(200).json({ token });
+      res.status(200).json({ token, id });
       next();
     } catch (error) {
       console.error(error);

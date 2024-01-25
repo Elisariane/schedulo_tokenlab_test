@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Container, Row, Spinner } from "react-bootstrap";
+import { Button, Card, Container } from "react-bootstrap";
 import apiEventFecth from "../axios/config";
 import { Link } from "react-router-dom";
+import "../index.css";
+import NavBar from "../components/Navbar";
 
 const Home = () => {
   const [events, setEvents] = useState([]); 
@@ -27,22 +29,8 @@ const Home = () => {
     }
   }
 
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
-  const event = {title, description, startTime, endTime, userId: 'e4ecb18c-bf19-4690-bca9-740bbd961893'};
-
-  const updateEvent = async (id) => {
-    try {
-      await apiEventFecth.put(`/events/${id}`, event); 
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
-    getEvents();
+    getEvents();  
   }, []);
 
 
@@ -57,11 +45,10 @@ const Home = () => {
 
   return (
     <>
+    <NavBar />
     {events.length === 0 ? (
         <Container className="mt-4 text-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+          <span>Poxa ainda não teve nenhum evento cadastrado :(</span>
         </Container>
       ) : (
         events.map((event) => (
@@ -81,12 +68,12 @@ const Home = () => {
                     
                   <Card.Text>{event.description}</Card.Text>
                   
-                  <Link to={`/update-event/${event.id}`}>
-                  <Button className="btn-sm m-2" variant="primary" >
+                  <Link to={sessionStorage.getItem("userId") != event.userId ? '#' : `/update-event/${event.id}`}>
+                  <Button className="btn-sm m-2" variant="primary" disabled={sessionStorage.getItem("userId") != event.userId}   >
                     Editar
                   </Button>
                   </Link>
-                  <Button className="btn-sm m-2" variant="danger" onClick={() => deleteEvent(event.id)}>
+                  <Button className="btn-sm m-2" variant="danger" onClick={() => deleteEvent(event.id)} disabled={sessionStorage.getItem("userId") != event.userId} >
                     Excluir
                   </Button>
                 </Card.Body>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import apiEventFecth from "../axios/config";
+import NavBar from  '../components/Navbar.jsx';
 
 const NewEvent = () => {
   const navigate = useNavigate();
@@ -30,21 +31,31 @@ const NewEvent = () => {
     }
   }, [parametros]);
 
-  const createEvent = async (e) => {
+  const createOrUpdateEvent = async (e) => {
     e.preventDefault();
 
-    setStartTime(new Date(startTime).toISOString());
-    setEndTime(new Date(endTime).toISOString());
-
+    const isoStartTime = new Date(startTime).toISOString();
+    const isoEndTime = new Date(endTime).toISOString();
     const event = {
       title,
       description,
-      startTime,
-      endTime,
-      userId: "e4ecb18c-bf19-4690-bca9-740bbd961893",
+      startTime: isoStartTime,
+      endTime: isoEndTime,
+      userId: sessionStorage.getItem("userId"),
     };
-    await apiEventFecth.post("/events", event);
-
+    if (parametros.id) {
+      try {
+        await apiEventFecth.put(`/events/${parametros.id}`, event);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      try {
+        await apiEventFecth.post("/events", event);
+      } catch (error) {
+        console.error(error);
+      }
+    }
     backToHome("/home");
   };
 
@@ -54,9 +65,11 @@ const NewEvent = () => {
 
   return (
     <>
+    <NavBar />
       <Container className="mt-4">
-        <h2 className="text-center">Adicione um novo Evento!</h2>
-        <Form onSubmit={(e) => createEvent(e)}>
+        { !parametros.id ? <h2 className="text-center">Adicione um novo Evento!</h2> : <h2 className="text-center">Edite seu Evento!</h2>}
+        
+        <Form onSubmit={(e) => createOrUpdateEvent(e)}>
           <Form.Group className="mb-3">
             <Form.Label>Título do evento</Form.Label>
             <Form.Control
@@ -79,7 +92,7 @@ const NewEvent = () => {
           <Form.Group className="mb-3">
             <Form.Label>Data e Hora Inicio</Form.Label>
             <Form.Control
-              value={setStartTime}
+              value={startTime}
               type="datetime-local"
               onChange={(e) => setStartTime(e.target.value)}
             />
@@ -93,7 +106,6 @@ const NewEvent = () => {
             />
           </Form.Group>
 
-          <div>
             <Button
               variant="danger"
               onClick={() => backToHome()}
@@ -104,7 +116,6 @@ const NewEvent = () => {
             <Button variant="primary" type="submit">
               Salvar
             </Button>
-          </div>
         </Form>
       </Container>
     </>

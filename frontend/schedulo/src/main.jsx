@@ -7,6 +7,7 @@ import Home from "./routes/Home.jsx";
 import NewEvent from "./routes/NewEvent.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from "./routes/Register.jsx";
+import Login from "./routes/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/",
+        element: <Login />,
       },
       {
         path: "/register",
