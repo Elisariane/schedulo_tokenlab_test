@@ -14,6 +14,13 @@ const NewEvent = () => {
 
   const parametros = useParams();
 
+
+  const formatToDate = (startTime, endTime) => {
+    setStartTime(startTime.slice(0, startTime.length - 5))
+    setEndTime(endTime.slice(0, endTime.length - 5))
+
+  }
+
   useEffect(() => {
     if (parametros.id) {
       apiEventFecth
@@ -21,8 +28,7 @@ const NewEvent = () => {
         .then((response) => {
           setTitle(response.data.title);
           setDescription(response.data.description);
-          setStartTime(response.data.startTime);
-          setEndTime(new Date(response.data.endTime).toISOString());
+          formatToDate(response.data.startTime, response.data.endTime);
           console.log(response.data);
         })
         .catch((error) => {
@@ -63,6 +69,7 @@ const NewEvent = () => {
     navigate("/home");
   };
 
+  console.log(endTime);
   return (
     <>
     <NavBar />
