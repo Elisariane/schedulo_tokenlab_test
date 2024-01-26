@@ -1,8 +1,5 @@
 .cards {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 4rem;
+  padding-bottom: 4rem;
 }
 
 
@@ -20,4 +17,9 @@
     color: red;
     font-weight: 400;
     font-size: .75rem;
+}
+
+
+.card-login_form {
+    display: inline-block;
 }

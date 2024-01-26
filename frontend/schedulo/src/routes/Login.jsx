@@ -19,9 +19,9 @@ const Login = () => {
     };
     await apiEventFecth
       .post("/auth/login", user)
-      .then(response => {
-        sessionStorage.setItem('token', response.data.token );
-        sessionStorage.setItem('userId', response.data.id );
+      .then((response) => {
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("userId", response.data.id);
 
         navigate("/home");
       })
@@ -33,7 +33,7 @@ const Login = () => {
 
   return (
     <Container className="p-4 text-center" fluid>
-      <Row>
+      <Row className="text-center m-4 p-4">
         <Col>
           <div>
             <h2>
@@ -46,9 +46,9 @@ const Login = () => {
             />
           </div>
         </Col>
-        <Col className="text-center">
-          <h2>Entre</h2>
-          <Form onSubmit={(e) => createUser(e)}>
+        <Col className="card-login">
+          <h2 className="m-4">Login</h2>
+          <Form onSubmit={(e) => createUser(e)} className="card-login_form">
             <Form.Group
               as={Row}
               className="mb-3"
@@ -57,7 +57,7 @@ const Login = () => {
               <Form.Label column sm="2">
                 Email
               </Form.Label>
-              <Col sm="6">
+              <Col sm="10">
                 <Form.Control
                   type="e-mail"
                   placeholder="email@exemplo.com"
@@ -74,7 +74,7 @@ const Login = () => {
               <Form.Label column sm="2">
                 Senha
               </Form.Label>
-              <Col sm="6">
+              <Col sm="10">
                 <Form.Control
                   type="password"
                   placeholder="senha"
@@ -82,16 +82,16 @@ const Login = () => {
                 />
               </Col>
             </Form.Group>
-
-            <Link to={"/register"}>
-            <Button className="m-4"  variant="link">
-              Registrar-se
-            </Button>
-            </Link>
-
-            <Button type="submit" disabled={!email && !password}>
+            <Button
+              className="btn btn-block"
+              type="submit"
+              disabled={!email && !password}
+            >
               Entrar
             </Button>
+            <p className="m-2">
+              Sem conta? Registre-se <Link to={"/register"}>aqui</Link>
+            </p>
           </Form>
         </Col>
       </Row>
