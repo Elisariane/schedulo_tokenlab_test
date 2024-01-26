@@ -4,6 +4,7 @@ import apiEventFecth from "../axios/config";
 import { Link } from "react-router-dom";
 import "../index.css";
 import NavBar from "../components/Navbar";
+import ImgEvent from "../assets/img-event.jpg";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -39,7 +40,9 @@ const Home = () => {
     hour: "2-digit",
     minute: "2-digit",
   };
-
+  const formatDateToText = (date) => {
+    return new Intl.DateTimeFormat("pt-BR", options).format(new Date(date));
+  };
   return (
     <>
       <NavBar />
@@ -49,66 +52,54 @@ const Home = () => {
         </Container>
       ) : (
         <div className="d-flex flex-wrap m-4">
-          {
-            events.map((event) => (
-              <>
-                <div
-                  className=" text-center m-4  "
-                  key={event.id}
-                >
-                  <Card style={{ width: "30rem" }} className="m-4 ">
-                    <Card.Img
-                      variant="top"
-                      src="https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    />
-                    <Card.Body>
-                      <Card.Title>{event.title}</Card.Title>
-                      <div className="container-hour ">
-                        <p className="text-hour">
-                          {new Intl.DateTimeFormat("pt-BR", options).format(
-                            new Date(event.startTime)
-                          )}
-                        </p>{" "}
-                        -
-                        <p className="text-hour">
-                          {new Intl.DateTimeFormat("pt-BR", options).format(
-                            new Date(event.endTime)
-                          )}
-                        </p>
-                      </div>
-    
-                      <Card.Text>{event.description}</Card.Text>
-    
-                      {sessionStorage.getItem("userId") == event.userId ? (
-                        <div>
-                          <Link
-                            to={
-                              sessionStorage.getItem("userId") != event.userId
-                                ? "#"
-                                : `/update-event/${event.id}`
-                            }
-                          >
-                            <Button className="btn-sm m-2" variant="primary">
-                              Editar
-                            </Button>
-                          </Link>
-                          <Button
-                            className="btn-sm m-2"
-                            variant="danger"
-                            onClick={() => deleteEvent(event.id)}
-                          >
-                            Excluir
+          {events.map((event) => (
+            <>
+              <div className=" text-center m-4  " key={event.id}>
+                <Card style={{ width: "30rem" }} className="m-4 ">
+                  <Card.Img variant="top" src={ImgEvent} />
+                  <Card.Body>
+                    <Card.Title>{event.title}</Card.Title>
+                    <div className="container-hour ">
+                      <p className="text-hour">
+                        {formatDateToText(event.startTime)}
+                      </p>{" "}
+                      -
+                      <p className="text-hour">
+                        {formatDateToText(event.endTime)}
+                      </p>
+                    </div>
+
+                    <Card.Text>{event.description}</Card.Text>
+
+                    {sessionStorage.getItem("userId") == event.userId ? (
+                      <div>
+                        <Link
+                          to={
+                            sessionStorage.getItem("userId") != event.userId
+                              ? "#"
+                              : `/update-event/${event.id}`
+                          }
+                        >
+                          <Button className="btn-sm m-2" variant="primary">
+                            Editar
                           </Button>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </Card.Body>
-                  </Card>
-                </div>
-              </>
-            ))
-          }
+                        </Link>
+                        <Button
+                          className="btn-sm m-2"
+                          variant="danger"
+                          onClick={() => deleteEvent(event.id)}
+                        >
+                          Excluir
+                        </Button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </Card.Body>
+                </Card>
+              </div>
+            </>
+          ))}
         </div>
       )}
     </>
