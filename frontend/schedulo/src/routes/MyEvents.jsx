@@ -21,7 +21,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     getMyEvents();
-  }, []);
+  });
 
   return (
     <>

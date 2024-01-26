@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Container, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import apiEventFecth from "../axios/config";
-import NavBar from  '../components/Navbar.jsx';
+import NavBar from "../components/Navbar.jsx";
 
 const NewEvent = () => {
   const navigate = useNavigate();
@@ -14,12 +14,10 @@ const NewEvent = () => {
 
   const parametros = useParams();
 
-
   const formatToDate = (startTime, endTime) => {
-    setStartTime(startTime.slice(0, startTime.length - 5))
-    setEndTime(endTime.slice(0, endTime.length - 5))
-
-  }
+    setStartTime(startTime.slice(0, startTime.length - 5));
+    setEndTime(endTime.slice(0, endTime.length - 5));
+  };
 
   useEffect(() => {
     if (parametros.id) {
@@ -29,13 +27,49 @@ const NewEvent = () => {
           setTitle(response.data.title);
           setDescription(response.data.description);
           formatToDate(response.data.startTime, response.data.endTime);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error("Erro ao obter dados do evento:", error);
         });
     }
   }, [parametros]);
+
+  const [error, setError] = useState("");
+
+  const handleTitleChange = (value) => {
+    setTitle(value);
+    console.log(title);
+    if (title == "" || title == null) {
+      setError("O evento deve possuir um título");
+    } else {
+      setError("");
+    }
+  };
+
+  const handleStartTimeChange = (value) => {
+    setStartTime(value);
+    const valueFormated = new Date(value).toISOString().slice(0, 16);
+    const today = new Date().toISOString().slice(0, 16);
+
+    if (valueFormated <= today) {
+      setError(
+        "A data/hora de início não pode ser anterior à data/hora atual."
+      );
+    } else {
+      setError("");
+    }
+  };
+
+  const handleEndTimeChange = (value) => {
+    setEndTime(value);
+    if (value <= startTime) {
+      setError(
+        "A data/hora de término deve ser posterior à data/hora de início."
+      );
+    } else {
+      setError("");
+    }
+  };
 
   const createOrUpdateEvent = async (e) => {
     e.preventDefault();
@@ -72,10 +106,14 @@ const NewEvent = () => {
   console.log(endTime);
   return (
     <>
-    <NavBar />
+      <NavBar />
       <Container className="mt-4">
-        { !parametros.id ? <h2 className="text-center">Adicione um novo Evento!</h2> : <h2 className="text-center">Edite seu Evento!</h2>}
-        
+        {!parametros.id ? (
+          <h2 className="text-center">Adicione um novo Evento!</h2>
+        ) : (
+          <h2 className="text-center">Edite seu Evento!</h2>
+        )}
+
         <Form onSubmit={(e) => createOrUpdateEvent(e)}>
           <Form.Group className="mb-3">
             <Form.Label>Título do evento</Form.Label>
@@ -83,7 +121,7 @@ const NewEvent = () => {
               value={title}
               type="text"
               placeholder="Título legal"
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => handleTitleChange(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -101,7 +139,7 @@ const NewEvent = () => {
             <Form.Control
               value={startTime}
               type="datetime-local"
-              onChange={(e) => setStartTime(e.target.value)}
+              onChange={(e) => handleStartTimeChange(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -109,20 +147,16 @@ const NewEvent = () => {
             <Form.Control
               value={endTime}
               type="datetime-local"
-              onChange={(e) => setEndTime(e.target.value)}
+              onChange={(e) => handleEndTimeChange(e.target.value)}
             />
           </Form.Group>
-
-            <Button
-              variant="danger"
-              onClick={() => backToHome()}
-              className="m-3"
-            >
-              Cancelar
-            </Button>
-            <Button variant="primary" type="submit">
-              Salvar
-            </Button>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Button variant="danger" onClick={() => backToHome()} className="m-3">
+            Cancelar
+          </Button>
+          <Button variant="primary" type="submit" disabled={error}>
+            Salvar
+          </Button>
         </Form>
       </Container>
     </>
