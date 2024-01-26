@@ -8,6 +8,7 @@ import NewEvent from "./routes/NewEvent.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from "./routes/Register.jsx";
 import Login from "./routes/Login.jsx";
+import MyEvents from "./routes/MyEvents.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/new-event",
         element: <NewEvent />,
+      },
+      {
+        path: "/my-events",
+        element: <MyEvents />,
       },
       {
         path: "/update-event/:id",

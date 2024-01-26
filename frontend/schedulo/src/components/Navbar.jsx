@@ -27,7 +27,7 @@ const NavBar = () => {
           </Navbar.Brand>
           <Nav className="justify-content-end navbar">
             <Nav.Link> <Link to={'/home'}>Home</Link> </Nav.Link>
-            <Nav.Link>Meus Eventos</Nav.Link>
+            <Nav.Link><Link to={'/my-events'}>Meus Eventos</Link></Nav.Link>
             <Nav.Link><Link to={'/new-event'}>Novo Evento</Link></Nav.Link>
             <Nav.Link><Link to={'/'} onClick={() => logout()}>Sair</Link></Nav.Link>
           </Nav>
