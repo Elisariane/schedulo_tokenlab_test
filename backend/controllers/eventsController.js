@@ -5,11 +5,7 @@ const eventsController = {
   getAllEvents: async (req, res) => {
     try {
       const events = await prisma.event.findMany();
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-      );
+
       res.json(events);
     } catch (error) {
       console.error(error);
@@ -24,12 +20,26 @@ const eventsController = {
       if (!event) {
         return res.status(404).json({ error: 'Event not found' });
       }
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-      );
+
       res.json(event);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
+  getEventByUserId: async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const events = await prisma.event.findMany({ where: { userId:  {
+        equals: userId,
+      },} });
+
+      if (!events.length) {
+        return res.status(404).json({ error: 'Event not found' });
+      }
+      
+      res.json(events);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -48,11 +58,7 @@ const eventsController = {
           userId,
         },
       });
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-      );
+    
       res.status(201).json(event);
     } catch (error) {
       console.error(error);
@@ -77,11 +83,6 @@ const eventsController = {
           userId,
         },
       });
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-      );
       res.status(200).json(updatedEvent);
     } catch (error) {
       console.error(error);
@@ -98,11 +99,7 @@ const eventsController = {
           id: id,
         },
       });
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-      );
+
       res.status(204).end();
     } catch (error) {
       console.error(error);
