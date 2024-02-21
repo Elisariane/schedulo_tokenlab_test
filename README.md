@@ -37,11 +37,13 @@ Para o backend:
     cd backend
     npm install
     ```
+    
 Para o frontend:
-    ```bash
+
+ ```bash
     cd frontend/schedulo
     npm install
-    ```
+ ```
 
 3. **Execute o projeto:**
 Para ambos o mesmo comando: 
@@ -50,6 +52,6 @@ Para ambos o mesmo comando:
     npm run dev
     ```
 
-4. Abra seu navegador e acesse http://localhost:5173/](http://localhost:5173/).
+4. Abra seu navegador e acesse [http://localhost:5173/](http://localhost:5173/).
 
 
